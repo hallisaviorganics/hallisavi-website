@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Product | HalliSavi</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="top"><span>♡ <b>Homemade with Love</b></span><span>✦ No Preservatives</span><span>✦ Small Batches</span><span>✦ Made in Karnataka</span></div>
+<header class="nav">
+<button class="menu" onclick="document.querySelector('.navlinks').classList.toggle('show')">☰</button>
+<a class="logo" href="index.html"><img class="logoMark" src="assets/hallisavi-logo.png" alt="HalliSavi Organics logo"><span><strong>HalliSavi</strong><small>HOME MADE</small></span></a>
+<nav class="navlinks"><a href="index.html">Home</a><a href="products.html">Products</a><a href="index.html#story">Our Story</a><a href="events.html">Events</a><a href="track.html">Track Order</a><a href="index.html#contact">Contact</a></nav>
+<div class="navBtns"><button class="iconBtn" aria-label="Search">⌕</button><a class="cartBtn" href="checkout.html">Snack Box <span class="cartCount">0</span></a></div>
+</header>
+<main class="page"><div class="crumb">Home › Products › Benne Murukku</div><div class="detailGrid"><div class="viewer" style="position:relative"><img id="prodImg" src="assets/benne.png"><div class="viewerBadge">↔ Drag / swipe • 360° ready</div></div><div class="detail"><div class="eyebrow">HALLISAVI HOME MADE</div><div id="dynamicDetail"></div><div class="also"><script>document.write(PRODUCTS.filter(p=>p.id!=='benne').map(productCard).join(''))</script></div></div><aside class="sideCart"><h2>Your Snack Box</h2><div class="minMsg"></div><div id="cartList"></div><div class="total"><span>Total</span><span class="cartTotal">₹0</span></div><a class="primary" style="display:block;text-align:center" href="checkout.html">View Snack Box</a></aside></div></main><script>let dq=1;</script>
+<script>
+(function(){
+ const id=new URLSearchParams(location.search).get("id")||"benne";
+ const defaults=[{id:"benne",name:"Benne Murukku",price:249,img:"assets/benne.png",tag:"Crispy & Buttery"},{id:"kodbale",name:"Kodbale",price:249,img:"assets/kodbale.png",tag:"Traditional & Crunchy"},{id:"masala",name:"Masala Mixture",price:249,img:"assets/masala.png",tag:"Spicy & Delicious"},{id:"ragi",name:"Ragi Mixture",price:249,img:"assets/ragi.png",tag:"Wholesome & Crunchy"},{id:"peanuts",name:"Roasted Peanuts",price:199,img:"assets/peanuts.png",tag:"Roasted & Fresh"}];
+ let ps;try{ps=JSON.parse(localStorage.getItem("hs_products")||"null")}catch(e){ps=null}ps=Array.isArray(ps)&&ps.length?ps:defaults;
+ const p=ps.find(x=>x.id===id)||ps[0];document.getElementById("prodImg").src=p.img;
+ document.getElementById("dynamicDetail").innerHTML=`<h1>${p.name}</h1><p class="kn">ಮನೆಯಲ್ಲೇ ತಯಾರಿಸಿದ</p><p>${p.tag||"Traditional homemade snack made in small batches."}</p><div class="price">₹${Number(p.price).toLocaleString("en-IN")}</div><div class="qty"><button onclick="dq=Math.max(1,dq-1);document.querySelector('#dq').textContent=dq">−</button><span id="dq">1</span><button onclick="dq++;document.querySelector('#dq').textContent=dq">+</button></div><button class="primary" onclick="add('${p.id}',dq)">Add to Snack Box</button>`;
+})();
+</script>
+<footer class="footer" id="contact"><div><h3>HalliSavi</h3><p>Traditional homemade snacks made with love and the finest ingredients.</p></div>
+<div><h4>Quick Links</h4><a href="index.html">Home</a><a href="products.html">Products</a><a href="events.html">Events</a><a href="track.html">Track Order</a></div>
+
+<div><h4>Contact</h4><p>☎ +91 92069 34370</p><p>✉ hello@hallisavi.com</p><p>⌖ Bengaluru, Karnataka</p></div>
+<div style="grid-column:1/-1;text-align:center;border-top:1px solid #2b6c49;padding-top:18px">© <span class="year"></span> HalliSavi Home Made. All Rights Reserved.</div></footer>
+
+<script src="app.js"></script>
+<div class="contact-float">
+<a class="contact-float-btn whatsapp-btn" href="https://wa.me/919206934370?text=Hi%20HalliSavi%2C%20I%20would%20like%20to%20order%20your%20snacks." target="_blank" rel="noopener" aria-label="WhatsApp HalliSavi">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8.3 8.3 0 0 1-12.3 7.2L4 20l1.3-3.6A8.3 8.3 0 1 1 20 11.5Z"/><path d="M9.1 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.6c.1.2.1.4-.1.6l-.5.6c-.1.1-.1.3 0 .5.5.8 1.1 1.4 2 1.8.2.1.4.1.5-.1l.6-.7c.1-.2.3-.2.5-.1l1.5.7c.2.1.3.3.2.5-.2.7-.8 1.2-1.5 1.3-1.2.2-2.8-.6-4-1.7-1.1-1-2.1-2.5-2.2-3.7-.1-.6.2-1.1.6-1.3Z"/></svg>
+</a>
+<a class="contact-float-btn call-btn" href="tel:+919206934370" aria-label="Call HalliSavi">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.5l2.2-.7c.7-.2 1.4.2 1.7.8l1.1 2.6c.2.5.1 1.1-.3 1.5L10.5 9c1 2.1 2.7 3.8 4.8 4.8l1.3-1.4c.4-.4 1-.5 1.5-.3l2.6 1.1c.6.3 1 1 .8 1.7l-.7 2.2c-.2.7-.9 1.1-1.6 1.1C11.7 18.2 5.8 12.3 5.1 4.8c-.1-.7.4-1.3 1.1-1.3Z"/></svg>
+</a>
+</div>
+</body></html>
