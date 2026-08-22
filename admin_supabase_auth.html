@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HalliSavi Admin</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{background:#f8f0df}.adminWrap{max-width:1250px;margin:30px auto;padding:0 18px}
+.adminHeader{background:#064d26;color:#fff;padding:18px 22px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center}
+.adminHeader a{color:#fff}.adminNav{display:flex;gap:8px;flex-wrap:wrap;background:#063e22;padding:12px;border-radius:0 0 16px 16px}
+.adminNav button{border:0;background:#075c2c;color:#fff;padding:11px 16px;border-radius:9px;font-weight:700;cursor:pointer}.adminNav button.active{background:#d8a91e;color:#17351f}
+.adminCard{background:#fff;border:1px solid #e5dcc8;border-radius:16px;padding:22px;margin-top:18px;box-shadow:0 8px 25px #0000000b}
+.hidden{display:none!important}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.order{border:1px solid #e5dcc8;border-radius:14px;padding:16px;margin:12px 0}.orderHead{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.orderItems{margin:10px 0;padding-left:20px}
+.statusRow{display:flex;gap:8px;align-items:center;justify-content:flex-end}.statusRow select{padding:10px;border:1px solid #d8c9aa;border-radius:8px}.primary,.danger,.secondary{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.primary{background:#075c2c;color:#fff}.secondary{background:#e8e0cf;color:#17351f}.danger{background:#a72d25;color:#fff}
+.productAdmin{display:grid;grid-template-columns:70px 1fr 150px 110px 90px;gap:12px;align-items:center;border-bottom:1px solid #eee3d0;padding:12px 0}.productAdmin img{width:65px;height:65px;object-fit:cover;border-radius:9px}
+.productAdmin input{width:100%;padding:9px;border:1px solid #d8c9aa;border-radius:8px}
+.statGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#f5f0e6;border:1px solid #e3d7bf;border-radius:12px;padding:18px}.stat b{display:block;font-size:28px;color:#075c2c}
+.reportTable{width:100%;border-collapse:collapse}.reportTable th,.reportTable td{border-bottom:1px solid #eee3d0;padding:10px;text-align:left}
+.notice{background:#edf5e8;padding:12px;border-radius:9px}
+@media(max-width:800px){.grid2,.statGrid{grid-template-columns:1fr 1fr}.productAdmin{grid-template-columns:55px 1fr 100px}.productAdmin>*:nth-child(n+4){grid-column:auto}.orderHead{display:block}.statusRow{justify-content:flex-start;margin-top:12px}}
+@media(max-width:520px){.grid2,.statGrid{grid-template-columns:1fr}.productAdmin{grid-template-columns:55px 1fr}.productAdmin .priceInput,.productAdmin .editBtn,.productAdmin .deleteBtn{grid-column:2}}
+</style>
+</head>
+<body>
+<div id="login" class="adminWrap" style="max-width:500px">
+<div class="adminCard">
+<h1 style="color:#064d26">HalliSavi Admin Login</h1>
+<p>Sign in with your authorized admin account.</p>
+<input id="adminEmail" type="email" value="admin@hallisavi.com" placeholder="Admin email" autocomplete="username" style="width:100%;padding:13px;border:1px solid #d8c9aa;border-radius:9px">
+<input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" style="width:100%;padding:13px;margin-top:10px;border:1px solid #d8c9aa;border-radius:9px">
+<button class="primary" onclick="login()" style="margin-top:10px">Login</button>
+<p id="loginMsg"></p>
+</div></div>
+
+<div id="panel" class="adminWrap hidden">
+<header class="adminHeader"><div><b>🌿 HalliSavi Admin</b><small style="display:block">Orders • Products • Events • News • Reports</small></div><a href="index.html">View Website</a></header>
+<nav class="adminNav">
+<button data-tab="orders" onclick="showTab('orders')">Orders</button>
+<button data-tab="products" onclick="showTab('products')">Products & Prices</button>
+<button data-tab="events" onclick="showTab('events')">Event Photos</button>
+<button data-tab="news" onclick="showTab('news')">News</button>
+<button data-tab="reports" onclick="showTab('reports')">Reports</button>
+<button onclick="logout()">Logout</button>
+</nav>
+
+<section id="ordersTab" class="adminCard"><h2>Orders & Status</h2><p>Choose the new status and click <b>Update</b>. Only one update action is required.</p><div id="orders"></div></section>
+
+<section id="productsTab" class="adminCard hidden">
+<h2>Products & Prices</h2>
+<p>Edit the price of an existing item or add a new snack. Changes are stored in this browser for testing.</p>
+<div id="productList"></div>
+<hr style="border:0;border-top:1px solid #eadfca;margin:22px 0">
+<h3>Add New Product</h3>
+<div class="grid2">
+<label>Name<input id="newName" style="width:100%;padding:11px;margin-top:5px;border:1px solid #d8c9aa;border-radius:8px"></label>
+<label>Price (₹)<input id="newPrice" type="number" min="1" style="width:100%;padding:11px;margin-top:5px;border:1px solid #d8c9aa;border-radius:8px"></label>
+<label>Tag<input id="newTag" placeholder="Traditional & Crunchy" style="width:100%;padding:11px;margin-top:5px;border:1px solid #d8c9aa;border-radius:8px"></label>
+<label>Product Image<input id="newImage" type="file" accept="image/*" style="width:100%;padding:9px;margin-top:5px"></label>
+</div>
+<button class="primary" onclick="addProduct()" style="margin-top:14px">Add Product</button>
+</section>
+
+<section id="eventsTab" class="adminCard hidden">
+<h2>Event Photos</h2><p>Upload event photos for testing.</p>
+<input id="eventFiles" type="file" accept="image/*" multiple>
+<input id="eventCaption" placeholder="Event caption" style="width:100%;padding:11px;margin:10px 0;border:1px solid #d8c9aa;border-radius:8px">
+<button class="primary" onclick="addEvents()">Add Event Photos</button><div id="eventList"></div>
+</section>
+
+<section id="newsTab" class="adminCard hidden">
+<h2>News / Updates</h2>
+<input id="newsTitle" placeholder="News title" style="width:100%;padding:11px;margin:7px 0;border:1px solid #d8c9aa;border-radius:8px">
+<textarea id="newsText" placeholder="News details" style="width:100%;padding:11px;margin:7px 0;border:1px solid #d8c9aa;border-radius:8px"></textarea>
+<button class="primary" onclick="addNews()">Publish News</button><div id="newsList"></div>
+</section>
+
+<section id="reportsTab" class="adminCard hidden">
+<h2>Reports</h2>
+<div class="statGrid">
+<div class="stat">Total Orders<b id="rOrders">0</b></div>
+<div class="stat">Sales Value<b id="rSales">₹0</b></div>
+<div class="stat">Items Sold<b id="rItems">0</b></div>
+<div class="stat">Delivered<b id="rDelivered">0</b></div>
+</div>
+<h3>Order Status Summary</h3><div id="statusReport"></div>
+<h3>Product Sales</h3><div id="productReport"></div>
+<button class="secondary" onclick="exportCSV()" style="margin-top:14px">Export Orders CSV</button>
+</section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://utvvfyqindpnhqyefzee.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_T964NZcXYVpPmVuHPpQSTA_hMUrlUKL";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const ADMIN_EMAIL="admin@hallisavi.com";
+
+const STATUSES=["Order Received","Payment Confirmed","Preparing","In Transit","Delivered","Cancelled"];
+async function login(){
+  const email=document.getElementById("adminEmail").value.trim().toLowerCase();
+  const password=document.getElementById("adminPass").value;
+  const msg=document.getElementById("loginMsg");
+  msg.textContent="Signing in...";
+  if(email!==ADMIN_EMAIL){
+    msg.textContent="This account is not authorized for the Admin panel.";
+    return;
+  }
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){
+    msg.textContent=error.message;
+    return;
+  }
+  if(data.user?.email?.toLowerCase()!==ADMIN_EMAIL){
+    await supabaseClient.auth.signOut();
+    msg.textContent="This account is not authorized for the Admin panel.";
+    return;
+  }
+  openPanel();
+}
+async function logout(){
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+function openPanel(){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+  showTab("orders");
+}
+function showTab(t){["orders","products","events","news","reports"].forEach(x=>{document.getElementById(x+"Tab").classList.toggle("hidden",x!==t);let b=document.querySelector('[data-tab="'+x+'"]');if(b)b.classList.toggle("active",x===t)});if(t==="orders")renderOrders();if(t==="products")renderProductsAdmin();if(t==="events")renderEvents();if(t==="news")renderNews();if(t==="reports")renderReports()}
+function getOrders(){return JSON.parse(localStorage.getItem("hs_orders")||"[]")}
+function saveOrders(o){localStorage.setItem("hs_orders",JSON.stringify(o))}
+function renderOrders(){let os=getOrders(),el=document.getElementById("orders");if(!os.length){el.innerHTML="<p>No orders yet.</p>";return}el.innerHTML=os.slice().reverse().map((o,ri)=>{let i=os.length-1-ri;return `<article class="order"><div class="orderHead"><div><b>${o.id}</b><br>${o.name} · ${o.mobile}<br><small>${o.date}</small><br>${o.address}, ${o.city} - ${o.pin}</div><div class="statusRow"><select id="st${i}">${STATUSES.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select><button class="primary" onclick="updateStatus(${i})">Update</button></div></div><ul class="orderItems">${o.items.map(x=>`<li>${x.p.name} × ${x.qty} @ ₹${x.p.price}</li>`).join("")}</ul><b>Total: ₹${Number(o.total).toLocaleString("en-IN")}</b></article>`}).join("")}
+function updateStatus(i){let o=getOrders(),s=document.getElementById("st"+i).value;o[i].status=s;o[i].updatedAt=new Date().toLocaleString("en-IN");saveOrders(o);renderOrders();alert("Order status updated to: "+s)}
+function getProducts(){try{let p=JSON.parse(localStorage.getItem("hs_products")||"null");return Array.isArray(p)&&p.length?p:[{id:"benne",name:"Benne Murukku",price:249,img:"assets/benne.png",tag:"Crispy & Buttery"},{id:"kodbale",name:"Kodbale",price:249,img:"assets/kodbale.png",tag:"Traditional & Crunchy"},{id:"masala",name:"Masala Mixture",price:249,img:"assets/masala.png",tag:"Spicy & Delicious"},{id:"ragi",name:"Ragi Mixture",price:249,img:"assets/ragi.png",tag:"Wholesome & Crunchy"},{id:"peanuts",name:"Roasted Peanuts",price:199,img:"assets/peanuts.png",tag:"Roasted & Fresh"}]}catch(e){return[]}}
+function saveProducts(p){localStorage.setItem("hs_products",JSON.stringify(p))}
+function renderProductsAdmin(){let p=getProducts();document.getElementById("productList").innerHTML=p.map((x,i)=>`<div class="productAdmin"><img src="${x.img}"><div><b>${x.name}</b><small style="display:block">${x.tag||""}</small></div><input class="priceInput" id="price${i}" type="number" min="1" value="${x.price}"><button class="primary editBtn" onclick="updatePrice(${i})">Update Price</button><button class="danger deleteBtn" onclick="deleteProduct(${i})">Delete</button></div>`).join("")}
+function updatePrice(i){let p=getProducts(),v=Number(document.getElementById("price"+i).value);if(!v)return alert("Enter a valid price.");p[i].price=v;saveProducts(p);renderProductsAdmin();alert("Price updated. Refresh the Products page to see it.")}
+function deleteProduct(i){if(!confirm("Delete this product?"))return;let p=getProducts();p.splice(i,1);saveProducts(p);renderProductsAdmin()}
+async function addProduct(){let name=document.getElementById("newName").value.trim(),price=Number(document.getElementById("newPrice").value),tag=document.getElementById("newTag").value.trim(),file=document.getElementById("newImage").files[0];if(!name||!price)return alert("Enter product name and price.");let img="assets/benne.png";if(file)img=await new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file)});let id=name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-"+Date.now().toString().slice(-5);let p=getProducts();p.push({id,name,price,img,tag});saveProducts(p);document.getElementById("newName").value="";document.getElementById("newPrice").value="";document.getElementById("newTag").value="";document.getElementById("newImage").value="";renderProductsAdmin();alert("Product added. Refresh the Products page to see it.")}
+function getEvents(){return JSON.parse(localStorage.getItem("hs_events")||"[]")}
+function renderEvents(){let e=getEvents();document.getElementById("eventList").innerHTML=e.map((x,i)=>`<div class="order"><img src="${x.image}" style="max-width:180px;border-radius:10px"><br>${x.caption||"Event"} <button class="danger" onclick="delEvent(${i})">Delete</button></div>`).join("")}
+async function addEvents(){let fs=[...document.getElementById("eventFiles").files],cap=document.getElementById("eventCaption").value.trim(),e=getEvents();for(let f of fs){let image=await new Promise(r=>{let rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(f)});e.push({image,caption:cap||"HalliSavi Event",date:new Date().toLocaleDateString("en-IN")})}localStorage.setItem("hs_events",JSON.stringify(e));document.getElementById("eventFiles").value="";renderEvents()}
+function delEvent(i){let e=getEvents();e.splice(i,1);localStorage.setItem("hs_events",JSON.stringify(e));renderEvents()}
+function getNews(){return JSON.parse(localStorage.getItem("hs_news")||"[]")}
+function renderNews(){document.getElementById("newsList").innerHTML=getNews().map((n,i)=>`<div class="order"><b>${n.title}</b><p>${n.text}</p><button class="danger" onclick="delNews(${i})">Delete</button></div>`).join("")}
+function addNews(){let title=document.getElementById("newsTitle").value.trim(),text=document.getElementById("newsText").value.trim();if(!title||!text)return alert("Enter title and details.");let n=getNews();n.unshift({title,text,date:new Date().toLocaleDateString("en-IN")});localStorage.setItem("hs_news",JSON.stringify(n));document.getElementById("newsTitle").value="";document.getElementById("newsText").value="";renderNews()}
+function delNews(i){let n=getNews();n.splice(i,1);localStorage.setItem("hs_news",JSON.stringify(n));renderNews()}
+function renderReports(){let o=getOrders(),sales=o.reduce((a,x)=>a+Number(x.total||0),0),items=o.reduce((a,x)=>a+x.items.reduce((b,i)=>b+Number(i.qty||0),0),0);document.getElementById("rOrders").textContent=o.length;document.getElementById("rSales").textContent="₹"+sales.toLocaleString("en-IN");document.getElementById("rItems").textContent=items;document.getElementById("rDelivered").textContent=o.filter(x=>x.status==="Delivered").length;let sm={};STATUSES.forEach(s=>sm[s]=0);o.forEach(x=>sm[x.status]=(sm[x.status]||0)+1);document.getElementById("statusReport").innerHTML='<table class="reportTable"><tr><th>Status</th><th>Orders</th></tr>'+Object.entries(sm).map(([s,n])=>`<tr><td>${s}</td><td>${n}</td></tr>`).join("")+'</table>';let pm={};o.forEach(x=>x.items.forEach(i=>{pm[i.p.name]=(pm[i.p.name]||0)+Number(i.qty||0)}));document.getElementById("productReport").innerHTML='<table class="reportTable"><tr><th>Product</th><th>Quantity</th></tr>'+Object.entries(pm).map(([n,q])=>`<tr><td>${n}</td><td>${q}</td></tr>`).join("")+'</table>'}
+function exportCSV(){let o=getOrders();let rows=[["Order ID","Customer","Mobile","Address","Status","Total","Date"],...o.map(x=>[x.id,x.name,x.mobile,`${x.address}, ${x.city} - ${x.pin}`,x.status,x.total,x.date])];let csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\\n");let a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);a.download="hallisavi-orders.csv";a.click()}
+(async function(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session?.user?.email?.toLowerCase()===ADMIN_EMAIL){
+    openPanel();
+  }else{
+    document.getElementById("login").classList.remove("hidden");
+    document.getElementById("panel").classList.add("hidden");
+  }
+})();
+</script>
+</body></html>
