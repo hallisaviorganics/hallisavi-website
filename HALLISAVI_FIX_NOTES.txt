@@ -1,0 +1,14 @@
+HalliSavi frontend fix – 2026-08-22
+
+Fixed:
+1. Product cards no longer use Benne Murukku as the fallback image for every
+   product. Products without a Supabase image_url now use their own
+   assets/<product-id>.png image.
+2. Product detail page uses the product-specific fallback image.
+3. app.js is cache-busted with a version query string so GitHub Pages/browser
+   caching is less likely to show an older price/cart script.
+
+Supabase product prices remain the source of truth. The cart uses the live
+Supabase-loaded product price when rendering totals.
+
+Backend/order persistence is not changed in this fix.

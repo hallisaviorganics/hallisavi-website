@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Home | HalliSavi</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="top"><span>♡ <b>Homemade with Love</b></span><span>✦ No Preservatives</span><span>✦ Small Batches</span><span>✦ Made in Karnataka</span></div>
+<header class="nav">
+<button class="menu" onclick="document.querySelector('.navlinks').classList.toggle('show')">☰</button>
+<a class="logo" href="index.html"><img class="logoMark" src="assets/hallisavi-logo.png" alt="HalliSavi Organics logo"><span><strong>HalliSavi</strong><small>HOME MADE</small></span></a>
+<nav class="navlinks"><a href="index.html">Home</a><a href="products.html">Products</a><a href="index.html#story">Our Story</a><a href="events.html">Events</a><a href="track.html">Track Order</a><a href="index.html#contact">Contact</a></nav>
+<div class="navBtns"><button class="iconBtn" aria-label="Search">⌕</button><a class="cartBtn" href="checkout.html">Snack Box <span class="cartCount">0</span></a></div>
+</header>
+
+<section class="hero"><div class="heroCopy"><div class="eyebrow">AUTHENTIC HOMEMADE SNACKS</div><h1>A Taste of Home,<span>Made with Love</span></h1><div class="kn">ಮನೆಯಲ್ಲಿ ಸವಿ, ಪ್ರೀತಿಯ ರುಚಿ</div><p>Traditional snacks prepared in small batches with carefully chosen ingredients and the warmth of home.</p><div class="heroBtns"><a class="primary" href="products.html">Shop Snacks →</a><a class="secondary" href="checkout.html">Build Your Snack Box 🎁</a></div></div><div class="heroVisual realHero">
+<img class="heroRealImage" src="assets/hallisavi-generated-hero.png" alt="HalliSavi homemade village snacks">
+
+</div></div></section>
+<div class="benefits"><div class="benefit"><b>♧</b>Hygienically Packed</div><div class="benefit"><b>♢</b>No Palm Oil</div><div class="benefit"><b>♧</b>Fast Delivery</div><div class="benefit"><b>✦</b>₹1,000 Minimum</div></div>
+<section class="section"><div class="sectionHead"><h2>Our Popular Snacks</h2><a href="products.html">View all products →</a></div><div class="products productGrid"></div></section>
+<section class="band"><div><h2>Build your HalliSavi Snack Box</h2><p>Choose your favourites and we'll pack them with care.</p></div><a class="secondary" href="checkout.html">Build Now →</a></section>
+<section class="section" id="story"><div class="sectionHead"><h2>From Our Events</h2><a href="events.html">View all events →</a></div><div class="events"><div class="event"><img src="assets/event-1.png"><p>Community Stall Moments</p></div><div class="event"><img src="assets/event-2.png"><p>Local Food Events</p></div><div class="event"><img src="assets/event-3.png"><p>Meet HalliSavi</p></div></div></section>
+
+<section class="section" id="news"><div class="sectionHead"><h2>Latest News</h2><span>HalliSavi updates</span></div><div id="newsGrid" class="events"></div></section>
+<footer class="footer" id="contact"><div><h3>HalliSavi</h3><p>Traditional homemade snacks made with love and the finest ingredients.</p></div>
+<div><h4>Quick Links</h4><a href="index.html">Home</a><a href="products.html">Products</a><a href="events.html">Events</a><a href="track.html">Track Order</a></div>
+
+<div><h4>Contact</h4><p>☎ +91 92069 34370</p><p>✉ hello@hallisavi.com</p><p>⌖ Bengaluru, Karnataka</p></div>
+<div style="grid-column:1/-1;text-align:center;border-top:1px solid #2b6c49;padding-top:18px">© <span class="year"></span> HalliSavi Home Made. All Rights Reserved.</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js?v=20260822-02"></script>
+<div class="contact-float">
+<a class="contact-float-btn whatsapp-btn" href="https://wa.me/919206934370?text=Hi%20HalliSavi%2C%20I%20would%20like%20to%20order%20your%20snacks." target="_blank" rel="noopener" aria-label="WhatsApp HalliSavi">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8.3 8.3 0 0 1-12.3 7.2L4 20l1.3-3.6A8.3 8.3 0 1 1 20 11.5Z"/><path d="M9.1 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.6c.1.2.1.4-.1.6l-.5.6c-.1.1-.1.3 0 .5.5.8 1.1 1.4 2 1.8.2.1.4.1.5-.1l.6-.7c.1-.2.3-.2.5-.1l1.5.7c.2.1.3.3.2.5-.2.7-.8 1.2-1.5 1.3-1.2.2-2.8-.6-4-1.7-1.1-1-2.1-2.5-2.2-3.7-.1-.6.2-1.1.6-1.3Z"/></svg>
+</a>
+<a class="contact-float-btn call-btn" href="tel:+919206934370" aria-label="Call HalliSavi">
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 3.5l2.2-.7c.7-.2 1.4.2 1.7.8l1.1 2.6c.2.5.1 1.1-.3 1.5L10.5 9c1 2.1 2.7 3.8 4.8 4.8l1.3-1.4c.4-.4 1-.5 1.5-.3l2.6 1.1c.6.3 1 1 .8 1.7l-.7 2.2c-.2.7-.9 1.1-1.6 1.1C11.7 18.2 5.8 12.3 5.1 4.8c-.1-.7.4-1.3 1.1-1.3Z"/></svg>
+</a>
+</div>
+<script>
+(function(){const n=JSON.parse(localStorage.getItem("hs_news")||"[]"),g=document.getElementById("newsGrid");if(!g)return;g.innerHTML=n.length?n.slice(0,3).map(x=>`<article class="event"><h3>${x.title}</h3><p>${x.text}</p><small>${x.date}</small></article>`).join(""):"<p>No latest updates yet.</p>"})();
+</script></body></html>

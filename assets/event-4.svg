@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560">
+<defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#f7d56b"/><stop offset=".5" stop-color="#f4a64b"/><stop offset="1" stop-color="#126039"/></linearGradient></defs>
+<rect width="900" height="560" fill="url(#g)"/>
+<rect x="50" y="55" width="800" height="450" rx="30" fill="#fff8e9" opacity=".92"/>
+<path d="M110 360 Q240 220 380 360 T650 360 T800 360" fill="none" stroke="#126039" stroke-width="40" opacity=".8"/>
+<rect x="175" y="160" width="550" height="165" rx="18" fill="#126039"/>
+<text x="450" y="225" text-anchor="middle" font-family="Georgia" font-size="48" font-weight="700" fill="#fff">HalliSavi</text>
+<text x="450" y="275" text-anchor="middle" font-family="Arial" font-size="26" fill="#f4d86c">STALL MOMENT • EVENT 4</text>
+<circle cx="140" cy="420" r="40" fill="#e4a633"/><circle cx="760" cy="420" r="40" fill="#e4a633"/>
+</svg>
