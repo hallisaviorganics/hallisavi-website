@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checkout | HalliSavi</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Checkout-specific layout */
+    .checkoutGrid{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+      gap:24px;
+      align-items:start;
+    }
+    .checkoutGrid .box{
+      min-width:0;
+    }
+    .checkoutFormGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .checkoutFormGrid label{
+      display:block;
+      font-weight:700;
+    }
+    .checkoutFormGrid .full{
+      grid-column:1 / -1;
+    }
+    .checkoutFormGrid input,
+    .checkoutFormGrid select{
+      width:100%;
+      box-sizing:border-box;
+      margin-top:7px;
+      padding:13px 14px;
+      border:1px solid #d8c9aa;
+      border-radius:10px;
+      background:#fff;
+      font:inherit;
+    }
+    .checkoutFormGrid input:focus,
+    .checkoutFormGrid select:focus{
+      outline:2px solid #cfe3d2;
+      border-color:#075c2c;
+    }
+    .checkoutNotice{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:12px;
+      background:#edf5e8;
+      color:#17351f;
+      line-height:1.5;
+    }
+    .checkoutActions{
+      margin-top:22px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .placeOrderBottom{
+      width:100%;
+      min-height:58px;
+      font-size:17px;
+    }
+    .placeOrderBottom:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+    .saveMsg{
+      margin-top:10px;
+      font-weight:700;
+    }
+    .saveMsg.error{color:#a72d25}
+    .saveMsg.success{color:#075c2c}
+    .addressPreview{
+      margin-top:14px;
+      padding:12px 14px;
+      border:1px solid #e5dcc8;
+      border-radius:10px;
+      background:#faf7ef;
+      font-size:14px;
+      line-height:1.55;
+    }
+    @media(max-width:800px){
+      .checkoutGrid{
+        grid-template-columns:1fr;
+      }
+    }
+    @media(max-width:600px){
+      .checkoutFormGrid{
+        grid-template-columns:1fr;
+      }
+      .checkoutFormGrid .full{
+        grid-column:auto;
+      }
+      .checkoutActions{
+        margin-top:18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top">
+  <span>♡ <b>Homemade with Love</b></span>
+  <span>✦ No Preservatives</span>
+  <span>✦ Small Batches</span>
+  <span>✦ Made in Karnataka</span>
+</div>
+
+<header class="nav">
+  <button class="menu" onclick="document.querySelector('.navlinks').classList.toggle('show')">☰</button>
+
+  <a class="logo" href="index.html">
+    <img class="logoMark" src="assets/hallisavi-logo.png" alt="HalliSavi Organics logo">
+    <span><strong>HalliSavi</strong><small>HOME MADE</small></span>
+  </a>
+
+  <nav class="navlinks">
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="index.html#story">Our Story</a>
+    <a href="events.html">Events</a>
+    <a href="track.html">Track Order</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+
+  <div class="navBtns">
+    <button class="iconBtn" aria-label="Search">⌕</button>
+    <a class="cartBtn" href="checkout.html">Snack Box <span class="cartCount">0</span></a>
+  </div>
+</header>
+
+<main class="page">
+  <div class="crumb">Home › Snack Box › Checkout</div>
+
+  <h1 style="font:700 48px 'Playfair Display';color:#60331f">
+    Complete your snack box
+  </h1>
+
+  <div class="checkoutGrid">
+
+    <!-- DELIVERY DETAILS -->
+    <section class="box">
+      <h2>Delivery Details</h2>
+
+      <form class="form" id="checkoutForm" onsubmit="placeOrder(event)">
+        <div class="checkoutFormGrid">
+
+          <label>
+            Full Name *
+            <input
+              name="full_name"
+              required
+              maxlength="120"
+              autocomplete="name"
+              placeholder="Enter your full name">
+          </label>
+
+          <label>
+            Mobile Number *
+            <input
+              name="mobile"
+              required
+              pattern="[0-9]{10}"
+              maxlength="10"
+              inputmode="numeric"
+              autocomplete="tel"
+              placeholder="10-digit mobile number">
+          </label>
+
+          <label>
+            House Number *
+            <input
+              name="house_number"
+              required
+              maxlength="120"
+              autocomplete="address-line1"
+              placeholder="House / Flat No.">
+          </label>
+
+          <label>
+            Street *
+            <input
+              name="street"
+              required
+              maxlength="180"
+              autocomplete="address-line2"
+              placeholder="Street name">
+          </label>
+
+          <label>
+            Area *
+            <input
+              name="area"
+              required
+              maxlength="180"
+              placeholder="Area / Locality">
+          </label>
+
+          <label>
+            Landmark
+            <input
+              name="landmark"
+              maxlength="180"
+              placeholder="Nearby landmark (optional)">
+          </label>
+
+          <label>
+            City *
+            <select class="citySelect" name="city" required></select>
+          </label>
+
+          <label>
+            Pincode *
+            <input
+              name="pincode"
+              required
+              pattern="[0-9]{6}"
+              maxlength="6"
+              inputmode="numeric"
+              autocomplete="postal-code"
+              placeholder="6-digit pincode">
+          </label>
+
+          <div class="full checkoutNotice">
+            <b>Minimum order: ₹1,000</b><br>
+            No minimum pack-count rule. Your order only needs to reach ₹1,000.
+          </div>
+
+          <div class="full addressPreview" id="addressPreview">
+            Your complete delivery address will appear here.
+          </div>
+
+        </div>
+      </form>
+    </section>
+
+    <!-- SNACK BOX -->
+    <aside class="box">
+      <h2>Your Snack Box</h2>
+
+      <div class="minMsg"></div>
+
+      <div id="cartList"></div>
+
+      <div class="total">
+        <span>Total</span>
+        <span class="cartTotal">₹0</span>
+      </div>
+
+      <a class="secondary" href="products.html">
+        + Add another product
+      </a>
+
+      <div class="checkoutActions">
+        <button
+          id="orderButton"
+          class="primary placeOrderBottom"
+          form="checkoutForm"
+          type="submit">
+          Place Order &amp; Continue on WhatsApp
+        </button>
+      </div>
+
+      <p id="saveMsg" class="saveMsg" aria-live="polite"></p>
+    </aside>
+
+  </div>
+</main>
+
+<footer class="footer" id="contact">
+  <div>
+    <h3>HalliSavi</h3>
+    <p>Traditional homemade snacks made with love and the finest ingredients.</p>
+  </div>
+
+  <div>
+    <h4>Quick Links</h4>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="events.html">Events</a>
+    <a href="track.html">Track Order</a>
+  </div>
+
+  <div>
+    <h4>Contact</h4>
+    <p>☎ +91 92069 34370</p>
+    <p>✉ hello@hallisavi.com</p>
+    <p>⌖ Bengaluru, Karnataka</p>
+  </div>
+
+  <div style="grid-column:1/-1;text-align:center;border-top:1px solid #2b6c49;padding-top:18px">
+    © <span class="year"></span> HalliSavi Home Made. All Rights Reserved.
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js?v=20260823-checkout01"></script>
+
+<script>
+/*
+  IMPORTANT:
+  This checkout function intentionally replaces the old localStorage-only
+  placeOrder() from app.js.
+
+  It saves the order directly to Supabase using the new delivery fields.
+  The SQL migration must be run before submitting a real order.
+*/
+
+const HS_SUPABASE_URL = "https://utvvfyqindpnhqyefzee.supabase.co";
+const HS_SUPABASE_KEY = "sb_publishable_T964NZcXYVpPmVuHPpQSTA_hMUrlUKL";
+const hsSupabase = window.supabase.createClient(
+  HS_SUPABASE_URL,
+  HS_SUPABASE_KEY
+);
+
+const HS_MIN_ORDER = 1000;
+
+function hsCartData() {
+  try {
+    if (typeof cartData === "function") return cartData();
+
+    const raw = JSON.parse(localStorage.getItem("hs_cart") || "[]");
+    const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+
+    return raw.map(item => {
+      const p = products.find(x => x.id === item.id);
+      return p ? { ...item, p } : null;
+    }).filter(Boolean);
+  } catch (e) {
+    return [];
+  }
+}
+
+function hsTotal(cart) {
+  return cart.reduce(
+    (sum, item) => sum + Number(item.p?.price || 0) * Number(item.qty || 0),
+    0
+  );
+}
+
+function hsMoney(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN");
+}
+
+function hsEscape(value) {
+  return String(value ?? "")
+    .replace(/[&<>"']/g, c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[c]));
+}
+
+function updateAddressPreview() {
+  const form = document.getElementById("checkoutForm");
+  const preview = document.getElementById("addressPreview");
+  if (!form || !preview) return;
+
+  const f = new FormData(form);
+
+  const parts = [
+    f.get("house_number"),
+    f.get("street"),
+    f.get("area"),
+    f.get("landmark")
+  ].filter(Boolean);
+
+  const city = f.get("city");
+  const pincode = f.get("pincode");
+
+  if (!parts.length && !city && !pincode) {
+    preview.textContent = "Your complete delivery address will appear here.";
+    return;
+  }
+
+  preview.innerHTML =
+    "<b>Delivery Address:</b><br>" +
+    hsEscape(parts.join(", ")) +
+    (city ? "<br>" + hsEscape(city) : "") +
+    (pincode ? " - " + hsEscape(pincode) : "");
+}
+
+function setupCheckoutPreview() {
+  const form = document.getElementById("checkoutForm");
+  if (!form) return;
+
+  form.querySelectorAll("input, select").forEach(el => {
+    el.addEventListener("input", updateAddressPreview);
+    el.addEventListener("change", updateAddressPreview);
+  });
+
+  updateAddressPreview();
+}
+
+async function placeOrder(event) {
+  event.preventDefault();
+
+  const button = document.getElementById("orderButton");
+  const saveMsg = document.getElementById("saveMsg");
+  const form = document.getElementById("checkoutForm");
+
+  saveMsg.textContent = "";
+  saveMsg.className = "saveMsg";
+
+  const cart = hsCartData();
+  const orderTotal = hsTotal(cart);
+
+  /* Only ₹1,000 minimum. No 4-pack restriction. */
+  if (orderTotal < HS_MIN_ORDER) {
+    alert("Minimum order value is ₹1,000.");
+    return;
+  }
+
+  if (!cart.length) {
+    alert("Your Snack Box is empty.");
+    return;
+  }
+
+  if (!form.reportValidity()) return;
+
+  const f = new FormData(form);
+
+  const fullName = String(f.get("full_name") || "").trim();
+  const mobile = String(f.get("mobile") || "").trim();
+  const houseNumber = String(f.get("house_number") || "").trim();
+  const street = String(f.get("street") || "").trim();
+  const area = String(f.get("area") || "").trim();
+  const landmark = String(f.get("landmark") || "").trim();
+  const city = String(f.get("city") || "").trim();
+  const pincode = String(f.get("pincode") || "").trim();
+
+  const address = [
+    houseNumber,
+    street,
+    area,
+    landmark
+  ].filter(Boolean).join(", ");
+
+  const orderNumber =
+    "HS" + Date.now().toString().slice(-8);
+
+  const items = cart.map(item => ({
+    product_id: item.p?.dbId ?? null,
+    product_name: item.p?.name || "",
+    quantity: Number(item.qty || 0),
+    price: Number(item.p?.price || 0),
+    line_total:
+      Number(item.p?.price || 0) * Number(item.qty || 0)
+  }));
+
+  button.disabled = true;
+  button.textContent = "Saving Order...";
+  saveMsg.textContent = "Saving your order securely...";
+
+  try {
+    /*
+      These column names are the final intended schema.
+      Run the SQL migration supplied after this HTML is uploaded.
+    */
+    const orderPayload = {
+      order_number: orderNumber,
+
+      /* Keep customer_name for compatibility with the existing table. */
+      customer_name: fullName,
+
+      /* New dedicated name field. */
+      full_name: fullName,
+
+      mobile: mobile,
+
+      /* Keep one combined address for compatibility/search. */
+      address: address,
+
+      house_number: houseNumber,
+      street: street,
+      area: area,
+      landmark: landmark,
+      city: city,
+      pincode: pincode,
+
+      total: orderTotal,
+      status: "Order Received",
+
+      /* Store the complete cart in the order itself. */
+      items: items
+    };
+
+    const { data: order, error: orderError } =
+      await hsSupabase
+        .from("orders")
+        .insert(orderPayload)
+        .select("id,order_number")
+        .single();
+
+    if (orderError) {
+      throw new Error(
+        "Order could not be saved: " + orderError.message
+      );
+    }
+
+    const savedOrderNumber =
+      order?.order_number || orderNumber;
+
+    const itemLines = items.map(item =>
+      "- " +
+      item.product_name +
+      " x " +
+      item.quantity +
+      " @ " +
+      hsMoney(item.price)
+    ).join("\n");
+
+    const whatsappText =
+`HalliSavi Order
+
+Order ID: ${savedOrderNumber}
+Customer: ${fullName}
+Mobile: ${mobile}
+
+Delivery Address:
+${address}
+${city} - ${pincode}
+
+Items:
+${itemLines}
+
+Total: ${hsMoney(orderTotal)}
+
+Please confirm the order and payment details.`;
+
+    localStorage.setItem("hs_last_order", savedOrderNumber);
+
+    if (typeof saveCart === "function") {
+      saveCart([]);
+    } else {
+      localStorage.removeItem("hs_cart");
+    }
+
+    if (typeof goWA === "function") {
+      goWA(whatsappText);
+    } else {
+      window.open(
+        "https://wa.me/919206934370?text=" +
+        encodeURIComponent(whatsappText),
+        "_blank"
+      );
+    }
+
+    window.location.href =
+      "track.html?id=" + encodeURIComponent(savedOrderNumber);
+
+  } catch (error) {
+    console.error(error);
+
+    saveMsg.textContent = error.message;
+    saveMsg.className = "saveMsg error";
+
+    alert(error.message);
+
+    button.disabled = false;
+    button.textContent =
+      "Place Order & Continue on WhatsApp";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupCheckoutPreview();
+
+  /*
+    app.js already renders the cart. We only make sure the button
+    follows the ₹1,000 rule.
+  */
+  setTimeout(() => {
+    const button = document.getElementById("orderButton");
+    if (!button) return;
+
+    const cart = hsCartData();
+    button.disabled = hsTotal(cart) < HS_MIN_ORDER;
+  }, 500);
+});
+</script>
+
+<div class="contact-float">
+  <a class="contact-float-btn whatsapp-btn"
+     href="https://wa.me/919206934370?text=Hi%20HalliSavi%2C%20I%20would%20like%20to%20order%20your%20snacks."
+     target="_blank"
+     rel="noopener"
+     aria-label="WhatsApp HalliSavi">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 11.5a8.3 8.3 0 0 1-12.3 7.2L4 20l1.3-3.6A8.3 8.3 0 1 1 20 11.5Z"/>
+      <path d="M9.1 8.5c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.6c.1.2.1.4-.1.6l-.5.6c-.1.1-.1.3 0 .5.5.8 1.1 1.4 2 1.8.2.1.4.1.5-.1l.6-.7c.1-.2.3-.2.5-.1l1.5.7c.2.1.3.3.2.5-.2.7-.8 1.2-1.5 1.3-1.2.2-2.8-.6-4-1.7-1.1-1-2.1-2.5-2.2-3.7-.1-.6.2-1.1.6-1.3Z"/>
+    </svg>
+  </a>
+
+  <a class="contact-float-btn call-btn"
+     href="tel:+919206934370"
+     aria-label="Call HalliSavi">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7.2 3.5l2.2-.7c.7-.2 1.4.2 1.7.8l1.1 2.6c.2.5.1 1.1-.3 1.5L10.5 9c1 2.1 2.7 3.8 4.8 4.8l1.3-1.4c.4-.4 1-.5 1.5-.3l2.6 1.1c.6.3 1 1 .8 1.7l-.7 2.2c-.2.7-.9 1.1-1.6 1.1C11.7 18.2 5.8 12.3 5.1 4.8c-.1-.7.4-1.3 1.1-1.3Z"/>
+    </svg>
+  </a>
+</div>
+
+</body>
+</html>
