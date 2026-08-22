@@ -26,8 +26,9 @@ body{background:#f8f0df}.adminWrap{max-width:1250px;margin:30px auto;padding:0 1
 <div id="login" class="adminWrap" style="max-width:500px">
 <div class="adminCard">
 <h1 style="color:#064d26">HalliSavi Admin Login</h1>
-<p>Testing mode — data is stored in this browser.</p>
-<input id="adminPass" type="password" placeholder="Admin password" style="width:100%;padding:13px;border:1px solid #d8c9aa;border-radius:9px">
+<p>Sign in with your authorized admin account.</p>
+<input id="adminEmail" type="email" value="admin@hallisavi.com" placeholder="Admin email" autocomplete="username" style="width:100%;padding:13px;border:1px solid #d8c9aa;border-radius:9px">
+<input id="adminPass" type="password" placeholder="Admin password" autocomplete="current-password" style="width:100%;padding:13px;margin-top:10px;border:1px solid #d8c9aa;border-radius:9px">
 <button class="primary" onclick="login()" style="margin-top:10px">Login</button>
 <p id="loginMsg"></p>
 </div></div>
@@ -88,12 +89,44 @@ body{background:#f8f0df}.adminWrap{max-width:1250px;margin:30px auto;padding:0 1
 </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const PASS="Halli@Admin2026";
+const SUPABASE_URL="https://utvvfyqindpnhqyefzee.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_T964NZcXYVpPmVuHPpQSTA_hMUrlUKL";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const ADMIN_EMAIL="admin@hallisavi.com";
+
 const STATUSES=["Order Received","Payment Confirmed","Preparing","In Transit","Delivered","Cancelled"];
-function login(){if(document.getElementById("adminPass").value===PASS){sessionStorage.setItem("hs_admin","1");openPanel()}else document.getElementById("loginMsg").textContent="Incorrect password."}
-function logout(){sessionStorage.removeItem("hs_admin");location.reload()}
-function openPanel(){document.getElementById("login").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");showTab("orders")}
+async function login(){
+  const email=document.getElementById("adminEmail").value.trim().toLowerCase();
+  const password=document.getElementById("adminPass").value;
+  const msg=document.getElementById("loginMsg");
+  msg.textContent="Signing in...";
+  if(email!==ADMIN_EMAIL){
+    msg.textContent="This account is not authorized for the Admin panel.";
+    return;
+  }
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){
+    msg.textContent=error.message;
+    return;
+  }
+  if(data.user?.email?.toLowerCase()!==ADMIN_EMAIL){
+    await supabaseClient.auth.signOut();
+    msg.textContent="This account is not authorized for the Admin panel.";
+    return;
+  }
+  openPanel();
+}
+async function logout(){
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+function openPanel(){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+  showTab("orders");
+}
 function showTab(t){["orders","products","events","news","reports"].forEach(x=>{document.getElementById(x+"Tab").classList.toggle("hidden",x!==t);let b=document.querySelector('[data-tab="'+x+'"]');if(b)b.classList.toggle("active",x===t)});if(t==="orders")renderOrders();if(t==="products")renderProductsAdmin();if(t==="events")renderEvents();if(t==="news")renderNews();if(t==="reports")renderReports()}
 function getOrders(){return JSON.parse(localStorage.getItem("hs_orders")||"[]")}
 function saveOrders(o){localStorage.setItem("hs_orders",JSON.stringify(o))}
@@ -115,6 +148,14 @@ function addNews(){let title=document.getElementById("newsTitle").value.trim(),t
 function delNews(i){let n=getNews();n.splice(i,1);localStorage.setItem("hs_news",JSON.stringify(n));renderNews()}
 function renderReports(){let o=getOrders(),sales=o.reduce((a,x)=>a+Number(x.total||0),0),items=o.reduce((a,x)=>a+x.items.reduce((b,i)=>b+Number(i.qty||0),0),0);document.getElementById("rOrders").textContent=o.length;document.getElementById("rSales").textContent="₹"+sales.toLocaleString("en-IN");document.getElementById("rItems").textContent=items;document.getElementById("rDelivered").textContent=o.filter(x=>x.status==="Delivered").length;let sm={};STATUSES.forEach(s=>sm[s]=0);o.forEach(x=>sm[x.status]=(sm[x.status]||0)+1);document.getElementById("statusReport").innerHTML='<table class="reportTable"><tr><th>Status</th><th>Orders</th></tr>'+Object.entries(sm).map(([s,n])=>`<tr><td>${s}</td><td>${n}</td></tr>`).join("")+'</table>';let pm={};o.forEach(x=>x.items.forEach(i=>{pm[i.p.name]=(pm[i.p.name]||0)+Number(i.qty||0)}));document.getElementById("productReport").innerHTML='<table class="reportTable"><tr><th>Product</th><th>Quantity</th></tr>'+Object.entries(pm).map(([n,q])=>`<tr><td>${n}</td><td>${q}</td></tr>`).join("")+'</table>'}
 function exportCSV(){let o=getOrders();let rows=[["Order ID","Customer","Mobile","Address","Status","Total","Date"],...o.map(x=>[x.id,x.name,x.mobile,`${x.address}, ${x.city} - ${x.pin}`,x.status,x.total,x.date])];let csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\\n");let a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);a.download="hallisavi-orders.csv";a.click()}
-if(sessionStorage.getItem("hs_admin")==="1")openPanel();
+(async function(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session?.user?.email?.toLowerCase()===ADMIN_EMAIL){
+    openPanel();
+  }else{
+    document.getElementById("login").classList.remove("hidden");
+    document.getElementById("panel").classList.add("hidden");
+  }
+})();
 </script>
 </body></html>
